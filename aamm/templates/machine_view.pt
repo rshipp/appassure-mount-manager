@@ -1,0 +1,32 @@
+<div metal:use-macro="view.layout">
+    <div metal:fill-slot="content">
+            <br>
+            <h3>Recovery Points</h3>
+            <table class="table table-striped table-hover" id="recovery_point_table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Contents</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr tal:repeat="recovery_point recovery_points">
+                        <td>${recovery_points[recovery_point]['date']}</td>
+                        <td>${recovery_points[recovery_point]['contents']}</td>
+                        <td>${recovery_points[recovery_point]['button']}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
+            <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+            <script type="text/javascript">
+                $(function(){
+                    $("#recovery_point_table").dataTable({
+                        "order": [ 0, 'desc' ],
+                    }).fadeIn();
+                });
+            </script>
+    </div>
+</div>
