@@ -5,16 +5,20 @@
             <table class="table table-striped table-hover" id="recovery_point_table">
                 <thead>
                     <tr>
-                        <th>Date</th>
                         <th>Contents</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr tal:repeat="recovery_point recovery_points">
-                        <td>${recovery_points[recovery_point]['date']}</td>
                         <td>${recovery_points[recovery_point]['contents']}</td>
-                        <td>${recovery_points[recovery_point]['button']}</td>
+                        <td>${recovery_points[recovery_point]['date']}</td>
+                        <td>
+                            <a href="${title}/${recovery_point}/${recovery_points[recovery_point]['date']}">
+                                ${recovery_points[recovery_point]['button']}
+                            </a>        
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -24,7 +28,7 @@
             <script type="text/javascript">
                 $(function(){
                     $("#recovery_point_table").dataTable({
-                        "order": [ 0, 'desc' ],
+                        "order": [ 1, 'desc' ],
                     }).fadeIn();
                 });
             </script>
