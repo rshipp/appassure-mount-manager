@@ -1,0 +1,8 @@
+<div metal:use-macro="view.layout">
+    <div metal:fill-slot="content">
+            <br>
+            <h3>Mounting recovery point...</h3>
+            <p>Recovery point: ${recovery_point}</p>
+
+    </div>
+</div>

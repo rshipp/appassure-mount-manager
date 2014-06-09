@@ -38,7 +38,7 @@ class Manager(object):
                             'name': agent.displayName,
                             'latest': self._humanize_time(latest),
                             # See FIXME below in get_recovery_points()
-                            'button': self._get_button(False),
+                            'button': '', #self._get_button(False),
                         }
                 return machines
         except AppAssureError:
