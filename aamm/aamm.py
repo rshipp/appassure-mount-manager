@@ -117,7 +117,7 @@ class Manager(object):
 
     def _get_button(self, mounted, href=''):
 
-        formatter = '<a href="%s" class="btn btn-xs btn-%s">%s</a>'
+        formatter = '<a href="%s" class="btn btn-xs btn-%s" data-toggle="modal" data-target="#mountModal">%s</a>'
 
         if mounted:
             button = formatter % (href, 'danger', 'Unmount')

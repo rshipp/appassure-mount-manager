@@ -1,8 +1,19 @@
-<div metal:use-macro="view.layout">
-    <div metal:fill-slot="content">
-            <br>
-            <h3>Mounting recovery point...</h3>
-            <p>Recovery point: ${recovery_point}</p>
-
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="mountModalLabel">Mounting recovery point...</h4>
+        </div>
+        <div class="modal-body">
+            <h4>Progress</h4>
+            <p></p>
+            <h4>Recovery point</h4>
+            <p>Once AppAssure has finished mounting the recovery point,
+            you will be able to access it <a href="">here</a>.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger">Dismount</button>
+        </div>
     </div>
 </div>

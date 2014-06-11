@@ -13,6 +13,24 @@
 
             </table>
 
+            <div class="modal fade" id="mountModal" tabindex="-1" role="dialog" arial-labelledby="mountModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="mountModalLabel">Mounting recovery point...</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p><i class="fa fa-spinner fa-spin"></i> Loading...</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default disabled" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger disabled">Dismount</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js"></script>
             <script type="text/javascript">
