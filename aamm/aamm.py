@@ -131,14 +131,6 @@ class Manager(object):
             time = utc - datetime.timedelta(0, self.tz_offset*60*60)
         else:
             time = utc + datetime.timedelta(0, self.tz_offset*60*60)
-        # More humanish:
-        #time = time.strftime("%I:%M:%S %p - %a, %b %d")
-        ## Strip off some extra 0's
-        #if time.startswith('0'):
-        #    time = time[1:]
-        #if time[len(time)-2:-1] == '0':
-        #    time = time[:len(time)-2] + time[-1:]
-        #return time
         # Sorts correctly:
         return time.isoformat().replace('T', ' ')
 
