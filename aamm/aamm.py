@@ -105,7 +105,7 @@ class Manager(object):
         with AppAssureSession(self.server, self.port, self.username,
                 self.password) as session:
             try:
-                mount = ILocalMountManagement(session).startMount(data)
+                return ILocalMountManagement(session).startMount(data)
             except AppAssureError as e:
                 return e[1].text
 
