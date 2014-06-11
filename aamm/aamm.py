@@ -67,25 +67,26 @@ class Manager(object):
                                 # FIXME: The AppAssure API seems to report this
                                 # incorrectly.
                                 image.isMounted for image in summary.volumeImages.volumeImageSummary
-                            ] else False, '%s/%s/%s/%s/%s' % (
+                            ] else False, '/%s/%s/%s/%s' % (
                                 machine,
                                 summaries[0].agentHostName,
-                                summary.id,
-                                self._humanize_time(summary.timeStamp),
+                                summary.id[37:],
                                 ' '.join([ str(quote_plus(image.id))
                                     for image in summary.volumeImages.volumeImageSummary
-                                ]),
-                            )
-                        ),
+                                ]).replace(machine, '')
+                                )),
                         'mounted': False,
                     })
                 return (summaries[0].agentHostName, recovery_points)
         except AppAssureError:
             return (str(), dict())
 
-    def mount_recovery_point(self, recovery_point_id,
-            recovery_point_time, agent_id, agent_name, volume_ids):
+    def mount_recovery_point(self, recovery_point_id, agent_id,
+            agent_name, volume_ids):
         """recovery_point_time should be in _humanize_time almost-ISO format."""
+        recovery_point_id = agent_id + '-' + recovery_point_id
+        timestamp = recovery_point_id[:-4]
+        volume_ids = [ agent_id + vid for vid in volume_ids ]
         data = OrderedDict([
             ('agentIds', {
                 'agentId': [ agent_id ],
@@ -93,7 +94,7 @@ class Manager(object):
             ('force', 'true'),
             ('isNightlyJob', 'false'),
             ('mountPoint', 'C:\ProgramData\AppRecovery\MountPoints\%s-%s' % (
-                agent_name, self._dehumanize_time(recovery_point_time))
+                agent_name, timestamp)
             ),
             ('recoveryPoint', recovery_point_id),
             ('type', 'ReadOnly'),
@@ -133,12 +134,6 @@ class Manager(object):
             time = utc + datetime.timedelta(0, self.tz_offset*60*60)
         # Sorts correctly:
         return time.isoformat().replace('T', ' ')
-
-    def _dehumanize_time(self, string):
-        # Return time in the format needed by mount_recovery_point,
-        # given a string in the format returned by _humanize_time.
-        return string.replace('-', '').replace(':', '').replace(' ', '-')
-
 
     def _any_true(self, list_):
         return True if 'true' in list_ else False

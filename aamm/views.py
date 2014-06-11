@@ -28,20 +28,18 @@ class AAMMViews(object):
 
     @view_config(route_name='mount_do', renderer='templates/mount_do.pt')
     def mount_do(self):
-        machine_id = self.request.matchdict['machine_id']
+        machine_id = self.request.matchdict['machine']
         machine_name = self.request.matchdict['machine_name']
         recovery_point_id = self.request.matchdict['point_id']
-        recovery_point_time = self.request.matchdict['point_time']
         volume_ids = self.request.matchdict['volume_ids'].split(' ')
         try:
             point = self.aamm.mount_recovery_point(recovery_point_id,
-                        recovery_point_time, machine_id, machine_name,
-                        volume_ids)
+                                                   machine_id,
+                                                   machine_name,
+                                                   volume_ids)
             if point and 'is already being used' in point:
                 return dict(title=machine_name,
                         recovery_point='Error: this path is already mounted.')
-            elif point:
-                raise KeyError
             return dict(title=machine_name, recovery_point=point)
         except KeyError:
             raise NotFound
