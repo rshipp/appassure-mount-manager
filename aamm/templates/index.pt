@@ -9,22 +9,24 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr tal:repeat="machine machines">
-                        <td>
-                            <a href="${machine}">${machines[machine]['name']}</a>
-                        </td>
-                        <td>${machines[machine]['latest']}</td>
-                        <td>${machines[machine]['button']}</td>
-                    </tr>
-                </tbody>
+
             </table>
 
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js"></script>
             <script type="text/javascript">
                 $(function(){
-                    $("#machine_table").dataTable().fadeIn();
+                    $.extend($.fn.dataTable.defaults.oLanguage, {
+                        "sLoadingRecords": '<i class="fa fa-spinner fa-spin"></i> Loading...',
+                    });
+                    $("#machine_table").dataTable({
+                        "ajax": "/api",
+                        "columns": [
+                            { "data": "link" },
+                            { "data": "date" },
+                            { "data": "button" },
+                        ],
+                    }).fadeIn();
                 });
             </script>
     </div>

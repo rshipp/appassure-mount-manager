@@ -15,15 +15,14 @@ class AAMMViews(object):
 
     @view_config(route_name='home', renderer='templates/index.pt')
     def home(self):
-        return dict(title='Protected Machines',
-                machines=self.aamm.get_machines())
+        return dict(title='Protected Machines')
 
     @view_config(route_name='machine_view', renderer='templates/machine_view.pt')
     def machine_view(self):
         machine = self.request.matchdict['machine']
+        machine_name = self.request.matchdict['machine_name']
         try:
-            machine_name, recovery_points = self.aamm.get_recovery_points(machine)
-            return dict(title=machine_name, recovery_points=recovery_points)
+            return dict(title=machine_name, machine=machine)
         except KeyError:
             raise NotFound
 
@@ -44,6 +43,24 @@ class AAMMViews(object):
             elif point:
                 raise KeyError
             return dict(title=machine_name, recovery_point=point)
+        except KeyError:
+            raise NotFound
+
+    # API
+
+    @view_config(route_name='api', renderer='prettyjson')
+    def api(self):
+        try:
+            return self.aamm.get_machines()
+        except KeyError:
+            raise NotFound
+
+    @view_config(route_name='machine_api', renderer='prettyjson')
+    def machine_api(self):
+        machine = self.request.matchdict['machine']
+        try:
+            _, recovery_points = self.aamm.get_recovery_points(machine)
+            return recovery_points
         except KeyError:
             raise NotFound
 

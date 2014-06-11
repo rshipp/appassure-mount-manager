@@ -31,15 +31,19 @@ class Manager(object):
                 agents = IAgentsManagement(session).getAgents().agent
 
                 machines = {}
+                machines['data'] = []
                 for agent in agents:
                     latest = agent.agentRecoveryPointsInfo.newestTimeStamp
                     if not latest.startswith('0001'):
-                        machines[agent.id] = {
-                            'name': agent.displayName,
-                            'latest': self._humanize_time(latest),
+                        machines['data'].append({
+                            "name": agent.displayName,
+                            "date": self._humanize_time(latest),
                             # See FIXME below in get_recovery_points()
-                            'button': '', #self._get_button(False),
-                        }
+                            "button": '', #self._get_button(False),
+                            "link": '<a href="%s/%s">%s</a>' % (agent.id,
+                                agent.displayName, agent.displayName),
+                            "id": agent.id,
+                            })
                 return machines
         except AppAssureError:
             return dict()
@@ -51,29 +55,33 @@ class Manager(object):
                 summaries = IRecoveryPointsManagement(session).getAllRecoveryPoints(machine).recoveryPointSummary
 
                 recovery_points = {}
+                recovery_points['data'] = []
                 for summary in summaries:
-                    recovery_points[summary.id] = {
+                    recovery_points['data'].append({
+                        'id': summary.id,
                         'contents': ', '.join([ image.volumeDisplayName for image in
                             summary.volumeImages.volumeImageSummary
                         ]),
                         'date': self._humanize_time(summary.timeStamp),
                         'button': self._get_button(True if 'true' in [
-                            # FIXME: The AppAssure API seems to report this
-                            # incorrectly.
-                            image.isMounted for image in summary.volumeImages.volumeImageSummary
-                        ] else False, '%s/%s/%s/%s/%s' % (
-                            machine,
-                            summaries[0].agentHostName,
-                            summary.id,
-                            self._humanize_time(summary.timeStamp),
-                            ' '.join([ str(quote_plus(image.id))
-                                for image in summary.volumeImages.volumeImageSummary
-                            ]),
-                        ))
-                    }
+                                # FIXME: The AppAssure API seems to report this
+                                # incorrectly.
+                                image.isMounted for image in summary.volumeImages.volumeImageSummary
+                            ] else False, '%s/%s/%s/%s/%s' % (
+                                machine,
+                                summaries[0].agentHostName,
+                                summary.id,
+                                self._humanize_time(summary.timeStamp),
+                                ' '.join([ str(quote_plus(image.id))
+                                    for image in summary.volumeImages.volumeImageSummary
+                                ]),
+                            )
+                        ),
+                        'mounted': False,
+                    })
                 return (summaries[0].agentHostName, recovery_points)
         except AppAssureError:
-            return dict()
+            return (str(), dict())
 
     def mount_recovery_point(self, recovery_point_id,
             recovery_point_time, agent_id, agent_name, volume_ids):
@@ -108,24 +116,12 @@ class Manager(object):
 
     def _get_button(self, mounted, href=''):
 
-        class Button(object):
-            # Allows Chameleon to print unescaped HTML.
-            def __init__(self, button_type, text):
-                self.button_type = button_type
-                self.text = text
-                self.href = href
-
-            def __html__(self):
-                return '<a href="%s" class="btn btn-xs btn-%s">%s</a>' % (
-                        self.href, self.button_type, self.text)
-
-            def __repr__(self):
-                return self.__html__()
+        formatter = '<a href="%s" class="btn btn-xs btn-%s">%s</a>'
 
         if mounted:
-            button = Button('danger', 'Unmount')
+            button = formatter % (href, 'danger', 'Unmount')
         else:
-            button = Button('primary', 'Mount')
+            button = formatter % (href, 'primary', 'Mount')
         return button
 
     def _humanize_time(self, string):

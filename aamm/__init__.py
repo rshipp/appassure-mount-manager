@@ -1,5 +1,5 @@
 from pyramid.config import Configurator
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.renderers import JSON
 
 
 def main(global_config, **settings):
@@ -7,9 +7,12 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings)
     config.include('pyramid_chameleon')
+    config.add_renderer('prettyjson', JSON(indent=4))
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
-    config.add_route('machine_view', '/{machine}')
+    config.add_route('api', '/api')
+    config.add_route('machine_api', '/api/{machine}')
+    config.add_route('machine_view', '/{machine}/{machine_name}')
     config.add_route('mount_do',
             '/{machine_id}/{machine_name}/{point_id}/{point_time}/{volume_ids}')
     config.add_view('aamm.views.notfound',

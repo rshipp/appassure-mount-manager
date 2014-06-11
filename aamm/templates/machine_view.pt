@@ -10,25 +10,24 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr tal:repeat="recovery_point recovery_points">
-                        <td>${recovery_points[recovery_point]['contents']}</td>
-                        <td>${recovery_points[recovery_point]['date']}</td>
-                        <td>
-                            <a href="${title}/${recovery_point}/${recovery_points[recovery_point]['date']}">
-                                ${recovery_points[recovery_point]['button']}
-                            </a>        
-                        </td>
-                    </tr>
-                </tbody>
+
             </table>
 
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js"></script>
             <script type="text/javascript">
                 $(function(){
+                    $.extend($.fn.dataTable.defaults.oLanguage, {
+                        "sLoadingRecords": '<i class="fa fa-spinner fa-spin"></i> Loading...',
+                    });
                     $("#recovery_point_table").dataTable({
                         "order": [ 1, 'desc' ],
+                        "ajax": "/api/${machine}",
+                        "columns": [
+                            { "data": "contents" },
+                            { "data": "date" },
+                            { "data": "button" },
+                        ],
                     }).fadeIn();
                 });
             </script>
