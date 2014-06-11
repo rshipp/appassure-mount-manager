@@ -84,8 +84,8 @@ class Manager(object):
     def mount_recovery_point(self, recovery_point_id, agent_id,
             agent_name, volume_ids):
         """recovery_point_time should be in _humanize_time almost-ISO format."""
-        recovery_point_id = agent_id + '-' + recovery_point_id
         timestamp = recovery_point_id[:-4]
+        recovery_point_id = agent_id + '-' + recovery_point_id
         volume_ids = [ agent_id + vid for vid in volume_ids ]
         data = OrderedDict([
             ('agentIds', {
