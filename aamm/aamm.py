@@ -6,6 +6,7 @@ from appassure.session import AppAssureSession, AppAssureError
 from appassure.core.IAgentsManagement import IAgentsManagement
 from appassure.core.IRecoveryPointsManagement import IRecoveryPointsManagement
 from appassure.core.ILocalMountManagement import ILocalMountManagement
+from appassure.unofficial.Events import Events
 
 class Manager(object):
     def __init__(self, server, port, username, password, tz_offset):
@@ -115,6 +116,14 @@ class Manager(object):
                 self.password) as session:
             try:
                 return ILocalMountManagement(session).dismountAllAgent(agent)
+            except AppAssureError as e:
+                return e[1].text
+
+    def get_progress(self, task_id):
+        with AppAssureSession(self.server, self.port, self.username,
+                self.password) as session:
+            try:
+                return Events(session).taskMonitor(task_id)
             except AppAssureError as e:
                 return e[1].text
 
