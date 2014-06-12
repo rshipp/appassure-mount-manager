@@ -110,6 +110,14 @@ class Manager(object):
             except AppAssureError as e:
                 return e[1].text
 
+    def dismount_recovery_points(self, agent):
+        with AppAssureSession(self.server, self.port, self.username,
+                self.password) as session:
+            try:
+                return ILocalMountManagement(session).dismountAllAgent(agent)
+            except AppAssureError as e:
+                return e[1].text
+
 
     #
     # Private methods.

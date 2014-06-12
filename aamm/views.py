@@ -38,8 +38,19 @@ class AAMMViews(object):
                                                    machine_name,
                                                    volume_ids)
             if point and 'is already being used' in point:
-                return dict(title=machine_name,
+                return dict(title=machine_name, machine=machine_id,
                         recovery_point='Error: this path is already mounted.')
+            return dict(title=machine_name, recovery_point=point,
+                    machine=machine_id)
+        except KeyError:
+            raise NotFound
+
+    @view_config(route_name='dismount_do', renderer='templates/dismount_do.pt')
+    def dismount_do(self):
+        machine_id = self.request.matchdict['machine']
+        machine_name = self.request.matchdict['machine_name']
+        try:
+            point = self.aamm.dismount_recovery_points(machine_id)
             return dict(title=machine_name, recovery_point=point)
         except KeyError:
             raise NotFound

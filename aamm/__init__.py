@@ -15,6 +15,7 @@ def main(global_config, **settings):
     config.add_route('machine_view', '/{machine}/{machine_name}')
     config.add_route('mount_do',
             '/{machine}/{machine_name}/{point_id}/{volume_ids}')
+    config.add_route('dismount_do', '/{machine}/{machine_name}/dismount')
     config.add_view('aamm.views.notfound',
             renderer='aamm:templates/404.pt',
             context='pyramid.exceptions.NotFound')
