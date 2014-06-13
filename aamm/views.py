@@ -37,11 +37,12 @@ class AAMMViews(object):
                                                    machine_id,
                                                    machine_name,
                                                    volume_ids)
+
             if point and 'is already being used' in point:
-                return dict(title=machine_name, machine=machine_id,
-                        recovery_point='Error: this path is already mounted.')
-            return dict(title=machine_name, recovery_point=point,
-                    machine=machine_id)
+                return dict(title=machine_name, machine=machine_id, task_id=None,
+                            error='Error: this path is already mounted.')
+            return dict(title=machine_name, task_id=str(point),
+                        machine=machine_id, error=None)
         except KeyError:
             raise NotFound
 
@@ -72,6 +73,11 @@ class AAMMViews(object):
             return recovery_points
         except KeyError:
             raise NotFound
+
+    @view_config(route_name='task_api', renderer='prettyjson')
+    def task_api(self):
+        task_id = self.request.matchdict['task_id']
+        return self.aamm.get_progress(task_id)
 
 def notfound(request):
     request.response.status = 404

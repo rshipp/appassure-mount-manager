@@ -1,6 +1,7 @@
 import datetime
 from collections import OrderedDict
 from urllib import quote_plus
+from bs4 import BeautifulSoup
 
 from appassure.session import AppAssureSession, AppAssureError
 from appassure.core.IAgentsManagement import IAgentsManagement
@@ -123,9 +124,15 @@ class Manager(object):
         with AppAssureSession(self.server, self.port, self.username,
                 self.password) as session:
             try:
-                return Events(session).taskMonitor(task_id)
+                events = Events(session).taskMonitor(task_id).text
+                percent = BeautifulSoup(events).td.td.text
+                if not percent.endswith('%'):
+                    return ''
+                return percent
             except AppAssureError as e:
                 return e[1].text
+            except (ValueError, AttributeError) as e:
+                return str(e)
 
 
     #

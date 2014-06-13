@@ -6,7 +6,12 @@
         </div>
         <div class="modal-body">
             <h4>Progress</h4>
-            <p></p>
+            <p>${task_id} ${error}</p>
+            <div class="progress progress-striped active">
+                <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width: 5%">
+                    <span class="sr-only">5% Complete</span>
+                </div>
+            </div>
             <h4>Recovery point</h4>
             <p>Once AppAssure has finished mounting the recovery point,
             you will be able to access it <a href="">here</a>.</p>

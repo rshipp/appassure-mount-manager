@@ -12,6 +12,7 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('api', '/api')
     config.add_route('machine_api', '/api/{machine}')
+    config.add_route('task_api', '/api/tasks/{task_id}')
     config.add_route('machine_view', '/{machine}/{machine_name}')
     config.add_route('mount_do',
             '/{machine}/{machine_name}/{point_id}/{volume_ids}')
