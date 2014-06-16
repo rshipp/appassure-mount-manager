@@ -127,8 +127,8 @@ class Manager(object):
                 events = Events(session).taskMonitor(task_id).text
                 percent = BeautifulSoup(events).td.td.text
                 if not percent.endswith('%'):
-                    return ''
-                return percent
+                    percent = "100%"
+                return int(percent[:-1])
             except AppAssureError as e:
                 return e[1].text
             except (ValueError, AttributeError) as e:
