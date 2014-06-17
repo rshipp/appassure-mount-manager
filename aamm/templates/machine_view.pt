@@ -48,6 +48,10 @@
                         ],
                     }).fadeIn();
                 });
+
+                $(document.body).on('hidden.bs.modal', function () {
+                  $('#mountModal').removeData('bs.modal')
+                });
             </script>
     </div>
 </div>
