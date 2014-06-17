@@ -17,7 +17,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <a href="/${machine}/${title}/dismount" type="button" class="btn btn-danger disabled">Dismount</a>
+            <a data-link="/${machine}/${title}/dismount" type="button" class="btn btn-danger disabled">Dismount</a>
         </div>
     </div>
 </div>
@@ -40,5 +40,15 @@ $(function updateProgressBar() {
         }
     });
   }, 1000);
+});
+
+$('.btn-danger').click(function () {
+  $.ajax({
+    url: $('.btn-danger').attr('data-link')
+  })
+    .done(function(data) {
+      $('.btn-danger').text(data);
+      $('.btn-danger').attr("class", "btn btn-danger disabled");
+  });
 });
 </script>
