@@ -11,9 +11,10 @@
                 <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                 </div>
             </div>
+            <!-- Must be customized for specific domain.
             <h4>Recovery point</h4>
             <p>Once AppAssure has finished mounting the recovery point,
-            you will be able to access it <a href="">here</a>.</p>
+            you will be able to access it <a href="">here</a>.</p>-->
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
