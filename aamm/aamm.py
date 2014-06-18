@@ -1,6 +1,5 @@
 import datetime
 from collections import OrderedDict
-from urllib import quote_plus
 from bs4 import BeautifulSoup
 
 from appassure.session import AppAssureSession, AppAssureError
@@ -26,7 +25,7 @@ class Manager(object):
     # Public methods.
     #
 
-    def get_machines(self):
+    def get_machines(self, request):
         try:
             with AppAssureSession(self.server, self.port, self.username,
                     self.password) as session:
@@ -42,15 +41,17 @@ class Manager(object):
                             "date": self._humanize_time(latest),
                             # See FIXME below in get_recovery_points()
                             "button": '', #self._get_button(False),
-                            "link": '<a href="%s/%s">%s</a>' % (agent.id,
-                                agent.displayName, agent.displayName),
+                            "link": '<a href="%s">%s</a>' % (
+                                request.route_url('machine_view', machine=agent.id,
+                                                  machine_name=agent.displayName),
+                                agent.displayName),
                             "id": agent.id,
                             })
                 return machines
         except AppAssureError:
             return dict()
 
-    def get_recovery_points(self, machine):
+    def get_recovery_points(self, machine, request):
         try:
             with AppAssureSession(self.server, self.port, self.username,
                     self.password) as session:
@@ -69,19 +70,19 @@ class Manager(object):
                                 # FIXME: The AppAssure API seems to report this
                                 # incorrectly.
                                 image.isMounted for image in summary.volumeImages.volumeImageSummary
-                            ] else False, '/%s/%s/%s/%s' % (
-                                machine,
-                                summaries[0].agentHostName,
-                                summary.id[37:],
-                                ' '.join([ str(quote_plus(image.id))
-                                    for image in summary.volumeImages.volumeImageSummary
-                                ]).replace(machine, '')
+                            ] else False, request.route_url('mount_do', machine=machine,
+                                                            machine_name=summaries[0].agentHostName,
+                                                            point_id=summary.id[37:],
+                                                            volume_ids=' '.join([
+                                                                str(image.id)
+                                                                for image in summary.volumeImages.volumeImageSummary
+                                                            ]).replace(machine, '')
                                 )),
                         'mounted': False,
                     })
                 return (summaries[0].agentHostName, recovery_points)
         except AppAssureError:
-            return (str(), dict())
+            return (str(), dict(data=''))
 
     def mount_recovery_point(self, recovery_point_id, agent_id,
             agent_name, volume_ids):

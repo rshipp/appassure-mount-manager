@@ -23,7 +23,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <a data-link="/${machine}/${title}/dismount" type="button" class="btn btn-danger disabled">Dismount</a>
+            <a data-link="${request.route_url('dismount_do', machine=machine, machine_name=title)}" type="button" class="btn btn-danger disabled">Dismount</a>
         </div>
     </div>
 </div>
@@ -32,7 +32,7 @@
 $(function updateProgressBar() {
   setTimeout(function () {
     $.ajax({
-        url: "/api/tasks/${task_id}"
+        url: "${request.route_url('task_api', task_id=task_id)}"
     })
       .done(function(data) {
         $('.progress-bar').attr("style", "width: "+data+"%");

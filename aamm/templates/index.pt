@@ -20,7 +20,7 @@
                         "sLoadingRecords": '<i class="fa fa-spinner fa-spin"></i> Loading...',
                     });
                     $("#machine_table").dataTable({
-                        "ajax": "/api",
+                        "ajax": "${request.route_url('api')}",
                         "columns": [
                             { "data": "link" },
                             { "data": "date" },

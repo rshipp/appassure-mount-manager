@@ -41,6 +41,9 @@ class AAMMViews(object):
             if point and 'is already being used' in point:
                 return dict(title=machine_name, machine=machine_id, task_id=None,
                             error='Error: this path is already mounted.')
+            elif 'serverError' in point:
+                return dict(title=machine_name, machine=machine_id, task_id=None,
+                            error=point)
             return dict(title=machine_name, task_id=str(point),
                         machine=machine_id, error=None)
         except KeyError:
@@ -61,7 +64,7 @@ class AAMMViews(object):
     @view_config(route_name='api', renderer='prettyjson')
     def api(self):
         try:
-            return self.aamm.get_machines()
+            return self.aamm.get_machines(self.request)
         except KeyError:
             raise NotFound
 
@@ -69,7 +72,8 @@ class AAMMViews(object):
     def machine_api(self):
         machine = self.request.matchdict['machine']
         try:
-            _, recovery_points = self.aamm.get_recovery_points(machine)
+            _, recovery_points = self.aamm.get_recovery_points(machine,
+                    self.request)
             return recovery_points
         except KeyError:
             raise NotFound

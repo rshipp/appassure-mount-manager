@@ -40,7 +40,7 @@
                     });
                     $("#recovery_point_table").dataTable({
                         "order": [ 1, 'desc' ],
-                        "ajax": "/api/${machine}",
+                        "ajax": "${request.route_url('machine_api', machine=machine)}",
                         "columns": [
                             { "data": "contents" },
                             { "data": "date" },
