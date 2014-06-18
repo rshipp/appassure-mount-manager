@@ -12,6 +12,7 @@ requires = [
     'pyramid_debugtoolbar',
     'waitress',
     'appassure',
+    'beautifulsoup4'
     ]
 
 setup(name='aamm',
