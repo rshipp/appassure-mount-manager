@@ -51,7 +51,9 @@
 
                 $(document.body).on('hidden.bs.modal', function () {
                   $(".modal-body").replaceWith('<div class="modal-body"><p><i class="fa fa-spinner fa-spin"></i> Loading...</p></div>');
-                  $('#mountModal').removeData('bs.modal')
+                  $('#mountModal').removeData('bs.modal');
+                  $('.btn-danger').attr('class', 'btn btn-danger disabled');
+                  $('.btn-danger').text('Dismount');
                 });
             </script>
     </div>
